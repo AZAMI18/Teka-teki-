@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teka-Teki Cinta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(-45deg, #ff6b9d, #c44569, #feca57, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hearts floating animation */
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            color: white;
+            z-index: 1000;
+            position: relative;
+        }
+
+        .hello-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: bounceIn 2s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b9d, #ff8e8e);
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,107,157,0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 30px rgba(255,107,157,0.4); }
+            50% { box-shadow: 0 10px 40px rgba(255,107,157,0.7); transform: scale(1.05); }
+            100% { box-shadow: 0 10px 30px rgba(255,107,157,0.4); }
+        }
+
+        .play-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,107,157,0.6);
+        }
+
+        /* Quiz Screen */
+        .quiz-screen {
+            display: none;
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 600px;
+            animation: slideInUp 1s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .question {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-input {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            color: white;
+            width: 70%;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .quiz-input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255,107,157,0.5);
+            transform: scale(1.02);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff6b9d, #ff8e8e);
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255,107,157,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255,107,157,0.6);
+        }
+
+        /* Surprise Screen */
+        .surprise-screen {
+            display: none;
+            text-align: center;
+            color: #ff69b4;
+            animation: explodeIn 2s ease-out;
+            z-index: 2000;
+        }
+
+        @keyframes explodeIn {
+            0% {
+                transform: scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(0deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .surprise-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+
+        .love-message {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,20,147,0.5);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,20,147,0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hello-text { font-size: 2.5rem; }
+            .question { font-size: 1.4rem; }
+            .surprise-title { font-size: 3.5rem; }
+            .quiz-input { width: 85%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts -->
+    <div class="heart" style="left: 10%; animation-delay: 0s;">💖</div>
+    <div class="heart" style="left: 20%; animation-delay: 1s;">💕</div>
+    <div class="heart" style="left: 80%; animation-delay: 2s;">💗</div>
+    <div class="heart" style="left: 90%; animation-delay: 3s;">💝</div>
+    <div class="heart" style="left: 30%; animation-delay: 4s; font-size: 25px;">💖</div>
+    <div class="heart" style="right: 20%; animation-delay: 5s;">💕</div>
+
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1 class="hello-text">Haloo Cikaa ✨</h1>
+        <button class="play-btn" onclick="startQuiz()">Main Teka-Teki Yok!! 💕</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div class="quiz-screen" id="quizScreen">
+        <div class="question">Apa yang selalu ada di hati, tapi tak pernah terlihat? 💭</div>
+        <div class="input-group">
+            <input type="text" class="quiz-input" id="answerInput" placeholder="Ketik jawabanmu disini..." autocomplete="off">
+        </div>
+        <button class="submit-btn" onclick="checkAnswer()">Kirim Jawaban 💖</button>
+    </div>
+
+    <!-- Surprise Screen -->
+    <div class="surprise-screen" id="surpriseScreen">
+        <h1 class="surprise-title">SURPRISE!! 🎉</h1>
+        <p class="love-message">CINTA! 💕 Kamu pintar banget! Aku sayang kamu banyak-banyak! 😍</p>
+        <a href="#" class="restart-btn" onclick="restartGame()">Main Lagi Yuk! 💝</a>
+    </div>
+
+    <script>
+        function startQuiz() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            document.getElementById('answerInput').focus();
+        }
+
+        function checkAnswer() {
+            const answer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = 'cinta';
+            
+            if (answer === correctAnswer || answer === ' cinta ') {
+                document.getElementById('quizScreen').style.display = 'none';
+                document.getElementById('surpriseScreen').style.display = 'block';
+                
+                // Tambah lebih banyak hati saat surprise
+                createHeartExplosion();
+            } else {
+                // Shake animation untuk jawaban salah
+                const input = document.getElementById('answerInput');
+                input.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function createHeartExplosion() {
+            for(let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = ['💖','💕','💗','💝','💘'][Math.floor(Math.random()*5)];
+                    heart.className = 'heart';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 5000);
+                }, i * 100);
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('surpriseScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.getElementById('answerInput').value = '';
+        }
+
+        // Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('quizScreen').style.display === 'block') {
+                checkAnswer();
+            }
+        });
+
+        // Shake animation untuk CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
